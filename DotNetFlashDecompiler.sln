@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetFlashDecompiler", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{24C5F4D5-DC59-4D4B-B9E1-D8FF5F9B4BB7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3CA8C9A5-CBAA-4B84-BF1D-EC159494F97B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetFlashDecompiler.Benchmarks", "tests\DotNetFlashDecompiler.Benchmarks\DotNetFlashDecompiler.Benchmarks.csproj", "{0694ADAD-59A3-4118-BCB4-675F80A70C9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +21,17 @@ Global
 		{E3FEC842-EF57-4847-9F14-F521EC79CD59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3FEC842-EF57-4847-9F14-F521EC79CD59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3FEC842-EF57-4847-9F14-F521EC79CD59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0694ADAD-59A3-4118-BCB4-675F80A70C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0694ADAD-59A3-4118-BCB4-675F80A70C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0694ADAD-59A3-4118-BCB4-675F80A70C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0694ADAD-59A3-4118-BCB4-675F80A70C9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E3FEC842-EF57-4847-9F14-F521EC79CD59} = {24C5F4D5-DC59-4D4B-B9E1-D8FF5F9B4BB7}
+		{0694ADAD-59A3-4118-BCB4-675F80A70C9E} = {3CA8C9A5-CBAA-4B84-BF1D-EC159494F97B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {630DA39C-D5E7-4FBA-923B-0228BCB17294}
