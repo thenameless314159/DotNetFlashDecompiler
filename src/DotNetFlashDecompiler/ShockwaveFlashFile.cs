@@ -1,37 +1,24 @@
 ﻿using DotNetFlashDecompiler.Abstractions;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using DotNetFlashDecompiler.Tags;
 using System.Buffers;
 
 namespace DotNetFlashDecompiler;
 
-public sealed record FlashFile(byte Version, CompressionKind Compression, FlashFrame Frame) : IFlashFile, IBufferReadable<IFlashFile>
+public sealed record ShockwaveFlashFile(byte Version, CompressionKind Compression, FlashFrame Frame) : IShockwaveFlashFile, IBufferReadable<IShockwaveFlashFile>
 {
-    private List<TagItem>? _tags;
-
-    public IList<TagItem> Tags
-    {
-        get => _tags ??= new List<TagItem>(); 
-        init => _tags = value as List<TagItem>;
-    }
-
-    /// <summary>
-    /// Allow to get the inner span from the <see pref="Tags"/> list for high-performance scenarios.
-    /// </summary>
-    /// <returns>A span of <see cref="TagItem"/>.</returns>
-    public Span<TagItem> GetTags() => CollectionsMarshal.AsSpan(_tags);
+    public IList<TagItem> Tags { get; init; } = new List<TagItem>();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IFlashFile Disassemble(byte[] buffer) 
+    public static IShockwaveFlashFile Disassemble(byte[] buffer) 
         => Disassemble(new ReadOnlySequence<byte>(buffer));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IFlashFile Disassemble(ReadOnlyMemory<byte> memory) 
+    public static IShockwaveFlashFile Disassemble(ReadOnlyMemory<byte> memory) 
         => Disassemble(new ReadOnlySequence<byte>(memory));
 
-    public static IFlashFile Disassemble(ReadOnlySequence<byte> sequence)
+    public static IShockwaveFlashFile Disassemble(ReadOnlySequence<byte> sequence)
     {
         var reader = new SequenceReader<byte>(sequence);
 
@@ -40,7 +27,7 @@ public sealed record FlashFile(byte Version, CompressionKind Compression, FlashF
             : decompiledFile;
     }
 
-    public static bool TryRead(ref SequenceReader<byte> reader, [NotNullWhen(true)] out IFlashFile? value)
+    public static bool TryRead(ref SequenceReader<byte> reader, [NotNullWhen(true)] out IShockwaveFlashFile? value)
     {
         value = default;
         if (!reader.TryPeek(out byte compression)) return false;
@@ -75,7 +62,7 @@ public sealed record FlashFile(byte Version, CompressionKind Compression, FlashF
             if (tagItem.Kind == TagKind.End) break;
         }
 
-        value = new FlashFile(version, compressionKind, frame) { Tags = tagItems };
+        value = new ShockwaveFlashFile(version, compressionKind, frame) { Tags = tagItems };
         return true;
     }
 }

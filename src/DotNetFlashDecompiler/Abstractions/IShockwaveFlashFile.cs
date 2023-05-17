@@ -2,7 +2,7 @@
 
 namespace DotNetFlashDecompiler.Abstractions;
 
-public interface IFlashFile
+public interface IShockwaveFlashFile
 {
     CompressionKind Compression { get; }
     IList<TagItem> Tags { get; }
