@@ -2,43 +2,47 @@
 
 public ref struct BitReader
 {
-    public BitReader(ref SequenceReader<byte> reader) => _reader = reader;
+    public BitReader() => (_currentByte, _bitPosition) = (0, 0);
+    private byte _currentByte;
+    private int _bitPosition;
 
-    private SequenceReader<byte> _reader; // mutable struct, do not make readonly
-    private byte _currentByte = 0;
-    private int _bitPosition = 0;
-
-    public int ReadUBits(int count)
+    public int ReadUBits(ref SequenceReader<byte> reader, int count)
     {
-        if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
-        if (_bitPosition == 0 && !_reader.TryRead(out _currentByte))
-            throw new EndOfStreamException();
-
-        int remainingBitsInByte = 8 - _bitPosition;
-        int bitsToRead = Math.Min(count, remainingBitsInByte);
-
-        int result = _currentByte >> remainingBitsInByte - bitsToRead & (1 << bitsToRead) - 1;
-        _bitPosition += bitsToRead;
-        count -= bitsToRead;
-
-        while (count > 0)
+        if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+        if (_bitPosition == 0)
         {
-            if (!_reader.TryRead(out _currentByte)) throw new EndOfStreamException();
-            bitsToRead = Math.Min(count, 8);
+            if (!reader.TryRead(out byte b)) throw new EndOfStreamException();
 
-            result = result << bitsToRead | _currentByte >> 8 - bitsToRead & (1 << bitsToRead) - 1;
-            _bitPosition = bitsToRead;
-            count -= bitsToRead;
+            _currentByte = b;
+        }
+
+        int result = 0;
+        for (int i = 0; i < count; i++)
+        {
+            int bit = (_currentByte >> (7 - _bitPosition)) & 1;
+            result += bit << (count - 1 - i);
+
+            if (++_bitPosition == 8)
+            {
+                _bitPosition = 0; // reset bit position
+
+                if (i != count - 1)
+                {
+                    if (!reader.TryRead(out byte b)) throw new EndOfStreamException();
+
+                    _currentByte = b;
+                }
+            }
         }
 
         return result;
     }
 
-    public int ReadSBits(int count)
+    public int ReadSBits(ref SequenceReader<byte> reader, int count)
     {
-        if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
+        if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
 
-        int result = ReadUBits(count);
+        int result = ReadUBits(ref reader, count);
         int shift = 32 - count;
 
         return result << shift >> shift;

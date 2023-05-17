@@ -110,7 +110,7 @@ public class ShockwaveFlash : IDisposable
             ReadOnlySpan<byte> compressed = input.ReadBytes(input.Length - input.Position);
             int totalDecompressed = ZLib.Decompress(compressed, bodySpan);
 
-            bodySpan = bodySpan.Slice(0, totalDecompressed);
+            bodySpan = bodySpan[..totalDecompressed];
         }
         else throw new NotSupportedException($"{nameof(CompressionKind.LZMA)} is not supported!");
 

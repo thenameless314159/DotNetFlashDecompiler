@@ -61,7 +61,7 @@ public sealed record ShockwaveFlashFile(byte Version, CompressionKind Compressio
         if (!FlashFrame.TryRead(ref bodyReader, out var frame))
             return false;
 
-        var tagItems = new List<TagItem>((int)bodyReader.Length / 2);
+        var tagItems = new List<TagItem>(); // TODO: pre-size
         while (TagItem.TryRead(ref bodyReader, out var tagItem))
         {
             tagItems.Add(tagItem);

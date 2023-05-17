@@ -66,10 +66,13 @@ public static class SequenceReaderExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryReadString(this ref SequenceReader<byte> reader, [NotNullWhen(true)] out string? value)
     {
-        if (reader.TryReadInt30(out var len) && reader.TryReadExact(len, out ReadOnlySequence<byte> valueSeq))
+        if (reader.TryReadInt30(out var len))
         {
-            value = valueSeq.AsString(Encoding.UTF8);
-            return true;
+            if(reader.TryReadExact(len, out ReadOnlySequence<byte> valueSeq))
+            {
+                value = valueSeq.AsString(Encoding.UTF8);
+                return true;
+            }
         }
 
         value = default;
@@ -160,12 +163,12 @@ public static class SequenceReaderExtensions
             return default!;
 
         var list = new List<TItem>(length);
-        foreach (ref var item in CollectionsMarshal.AsSpan(list))
+        for(var i = 0; i < length; i++)
         {
-            if (!TItem.TryRead(ref reader, file, out var i))
+            if (!TItem.TryRead(ref reader, file, out var item))
                 throw new InvalidOperationException($"Failed to read item of type : {typeof(TItem).FullName}");
 
-            item = i;
+            list.Add(item);
         }
 
         return list;
