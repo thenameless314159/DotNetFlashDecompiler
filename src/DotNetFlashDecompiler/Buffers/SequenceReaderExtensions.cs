@@ -1,19 +1,20 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using DotNetFlashDecompiler;
+﻿using System.Buffers.Binary;
 using DotNetFlashDecompiler.Abstractions;
 using DotNetFlashDecompiler.Actionscript;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using DotNetFlashDecompiler.Tags;
+using System.Text;
 
 namespace System.Buffers;
 
 public static class SequenceReaderExtensions
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryReadBigEndian(this ref SequenceReader<byte> reader, out ushort value)
+    public static bool TryReadLittleEndian(this ref SequenceReader<byte> reader, out ushort value)
     {
-        if (reader.TryReadBigEndian(out short temp))
+        if (reader.TryReadLittleEndian(out short temp))
         {
             value = (ushort)temp;
             return true;
@@ -24,9 +25,9 @@ public static class SequenceReaderExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryReadBigEndian(this ref SequenceReader<byte> reader, out uint value)
+    public static bool TryReadLittleEndian(this ref SequenceReader<byte> reader, out uint value)
     {
-        if (reader.TryReadBigEndian(out int temp))
+        if (reader.TryReadLittleEndian(out int temp))
         {
             value = (uint)temp;
             return true;
@@ -37,9 +38,9 @@ public static class SequenceReaderExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryReadBigEndian(this ref SequenceReader<byte> reader, out ulong value)
+    public static bool TryReadLittleEndian(this ref SequenceReader<byte> reader, out ulong value)
     {
-        if (reader.TryReadBigEndian(out long temp))
+        if (reader.TryReadLittleEndian(out long temp))
         {
             value = (ulong)temp;
             return true;
@@ -50,9 +51,9 @@ public static class SequenceReaderExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryReadBigEndian(this ref SequenceReader<byte> reader, out double value)
+    public static bool TryReadLittleEndian(this ref SequenceReader<byte> reader, out double value)
     {
-        if (reader.TryReadBigEndian(out long temp))
+        if (reader.TryReadLittleEndian(out long temp))
         {
             value = BitConverter.Int64BitsToDouble(temp);
             return true;

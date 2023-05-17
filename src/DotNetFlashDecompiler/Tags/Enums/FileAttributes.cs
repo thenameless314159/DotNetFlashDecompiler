@@ -1,4 +1,4 @@
-﻿namespace DotNetFlashDecompiler;
+﻿namespace DotNetFlashDecompiler.Tags;
 
 [Flags]
 public enum FileAttributes : byte

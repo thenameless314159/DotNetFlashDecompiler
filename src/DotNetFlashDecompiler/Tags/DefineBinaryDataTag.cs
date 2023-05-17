@@ -12,8 +12,8 @@ public sealed record DefineBinaryDataTag(ushort Id, ReadOnlySequence<byte> Data)
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort id)) return false;
-        if (!reader.TryReadBigEndian(out uint reserved) && reserved != 0) return false;
+        if (!reader.TryReadLittleEndian(out ushort id)) return false;
+        if (!reader.TryReadLittleEndian(out uint reserved) && reserved != 0) return false;
         if (!reader.TryReadExact((int)reader.Remaining, out var data)) return false;
 
         value = new DefineBinaryDataTag(id, data);

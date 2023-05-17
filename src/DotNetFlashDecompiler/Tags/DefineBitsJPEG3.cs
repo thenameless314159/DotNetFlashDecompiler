@@ -13,8 +13,8 @@ public sealed record DefineBitsJPEG3(ushort Id,  ReadOnlySequence<byte> Data, Im
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort id)) return false;
-        if (!reader.TryReadBigEndian(out int dataLength)) return false;
+        if (!reader.TryReadLittleEndian(out ushort id)) return false;
+        if (!reader.TryReadLittleEndian(out int dataLength)) return false;
         if (!reader.TryReadExact(dataLength, out var data)) return false;
         if (!reader.TryReadImageFormat(out var format)) return false;
 

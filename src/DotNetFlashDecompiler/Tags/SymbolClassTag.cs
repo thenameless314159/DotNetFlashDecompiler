@@ -14,12 +14,12 @@ public sealed record SymbolClassTag : TagItem, IBufferReadable<TagItem>
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort symbolsCount)) return false;
+        if (!reader.TryReadLittleEndian(out ushort symbolsCount)) return false;
 
         var symbols = new Dictionary<ushort, string>(symbolsCount);
         for (int i = 0; i < symbolsCount; i++)
         {
-            if (!reader.TryReadBigEndian(out ushort id)) return false;
+            if (!reader.TryReadLittleEndian(out ushort id)) return false;
             if (!reader.TryReadTo(out ReadOnlySequence<byte> nameSeq, 0)) return false;
 
             if (!symbols.TryAdd(id, nameSeq.AsString())) return false;

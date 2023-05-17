@@ -13,7 +13,7 @@ public sealed record DefineSoundTag(ushort Id, int SoundType, int Size, int Form
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort id)) return false;
+        if (!reader.TryReadLittleEndian(out ushort id)) return false;
         if (!reader.TryRead(out byte flags)) return false;
 
         var sampleRate = ((flags & 0b1100) >> 2) switch
@@ -25,7 +25,7 @@ public sealed record DefineSoundTag(ushort Id, int SoundType, int Size, int Form
             _ => throw new InvalidDataException("Invalid sample rate value.")
         };
 
-        if (!reader.TryReadBigEndian(out uint soundSampleCount)) return false;
+        if (!reader.TryReadLittleEndian(out uint soundSampleCount)) return false;
         if (!reader.TryReadExact((int)reader.Remaining, out var data)) return false;
 
         value = new DefineSoundTag(id, flags & 1, flags & 2, flags >> 4, sampleRate, soundSampleCount, data);

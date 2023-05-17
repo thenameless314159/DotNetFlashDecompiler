@@ -13,7 +13,7 @@ public sealed record DefineBitsLossless2Tag(ushort Id, ushort Width, ushort Heig
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort id)) return false;
+        if (!reader.TryReadLittleEndian(out ushort id)) return false;
         if (!reader.TryRead(out byte formatByte)) return false;
 
         var format = formatByte switch
@@ -23,8 +23,8 @@ public sealed record DefineBitsLossless2Tag(ushort Id, ushort Width, ushort Heig
             _ => throw new InvalidDataException("Invalid bitmap format.")
         };
 
-        if (!reader.TryReadBigEndian(out ushort width)) return false;
-        if (!reader.TryReadBigEndian(out ushort height)) return false;
+        if (!reader.TryReadLittleEndian(out ushort width)) return false;
+        if (!reader.TryReadLittleEndian(out ushort height)) return false;
 
         byte colorTableSize = 0;
         if (format == BitmapFormat.ColorMap8)

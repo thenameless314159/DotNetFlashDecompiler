@@ -35,19 +35,26 @@ public sealed record ShockwaveFlashFile(byte Version, CompressionKind Compressio
         reader.Advance(3);
 
         if (!reader.TryRead(out byte version)) return false;
-        if (!reader.TryReadBigEndian(out uint length)) return false;
+        if (!reader.TryReadLittleEndian(out uint length)) return false;
 
-        var body = reader.Sequence.Slice(reader.Consumed, length - 8);
-        if (compressionKind != CompressionKind.None)
+        length -= 8;
+        var body = reader.UnreadSequence;
+
+        switch (compressionKind)
         {
-            if (compressionKind != CompressionKind.ZLib)
+            case CompressionKind.None: break;
+            // TODO : find a way to avoid this re-allocation
+            case CompressionKind.ZLib:
+            {
+                var decompressed = new byte[length];
+                var decompressedSpan = decompressed.AsSpan();
+                var totalSize = body.Decompress(ref decompressedSpan);
+                body = new ReadOnlySequence<byte>(decompressed[..totalSize]);
+                break;
+            }
+            default:
                 throw new ArgumentOutOfRangeException(nameof(compressionKind),
                     "The given compression kind is not supported.");
-
-            var decompressed = new byte[body.Length];
-            var decompressedSpan = decompressed.AsSpan();
-            var totalSize = body.Decompress(ref decompressedSpan);
-            body = new ReadOnlySequence<byte>(decompressed[..totalSize]);
         }
 
         var bodyReader = new SequenceReader<byte>(body);

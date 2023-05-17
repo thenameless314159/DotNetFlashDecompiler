@@ -11,8 +11,8 @@ public sealed record FlashFrame(FlashRectangle Area, ushort Rate, ushort Count) 
         value = default;
 
         if (!FlashRectangle.TryRead(ref reader, out var area)) return false;
-        if (!reader.TryReadBigEndian(out ushort rate)) return false;
-        if (!reader.TryReadBigEndian(out ushort count)) return false;
+        if (!reader.TryReadLittleEndian(out ushort rate)) return false;
+        if (!reader.TryReadLittleEndian(out ushort count)) return false;
 
         value = new FlashFrame(area, (ushort)(rate >> 8), count);
         return true;

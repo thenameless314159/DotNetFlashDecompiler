@@ -1,4 +1,6 @@
-﻿namespace DotNetFlashDecompiler.Abstractions;
+﻿using DotNetFlashDecompiler.Tags;
+
+namespace DotNetFlashDecompiler.Abstractions;
 
 public interface ITagItem
 {

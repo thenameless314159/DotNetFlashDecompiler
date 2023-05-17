@@ -12,7 +12,7 @@ public sealed record DefineFontNameTag(ushort Id, string Name, string Copyright)
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort id)) return false;
+        if (!reader.TryReadLittleEndian(out ushort id)) return false;
         if (!reader.TryReadTo(out ReadOnlySequence<byte> nameSeq, 0)) return false;
         if (!reader.TryReadTo(out ReadOnlySequence<byte> copyrightSeq, 0)) return false;
 

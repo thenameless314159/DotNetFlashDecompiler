@@ -1,8 +1,7 @@
 ﻿using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using DotNetFlashDecompiler.Abstractions;
 using DotNetFlashDecompiler.Tags;
+using System.Diagnostics.CodeAnalysis;
+using DotNetFlashDecompiler.Abstractions;
 
 namespace DotNetFlashDecompiler.Actionscript;
 
@@ -31,8 +30,8 @@ public sealed record ABCFile : IBufferReadable<ABCFile>
     public static bool TryRead(ref SequenceReader<byte> reader, [NotNullWhen(true)] out ABCFile? value)
     {
         value = default;
-        if (!reader.TryReadBigEndian(out ushort minor)) return false;
-        if (!reader.TryReadBigEndian(out ushort major)) return false;
+        if (!reader.TryReadLittleEndian(out ushort minor)) return false;
+        if (!reader.TryReadLittleEndian(out ushort major)) return false;
         
         var abcFile = new ABCFile(new Version(major, minor));
         if (!abcFile.ConstantPool.TryUnpack(ref reader)) return false;

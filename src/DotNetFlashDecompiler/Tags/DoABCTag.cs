@@ -12,7 +12,7 @@ public sealed record DoABCTag(uint Flags, string Name, ReadOnlySequence<byte> Da
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out uint flags)) return false;
+        if (!reader.TryReadLittleEndian(out uint flags)) return false;
         if (!reader.TryReadTo(out ReadOnlySequence<byte> nameSeq, 0)) return false;
         if (!reader.TryReadExact((int)reader.Remaining, out var data)) return false;
 

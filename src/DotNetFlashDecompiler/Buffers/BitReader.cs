@@ -10,7 +10,7 @@ public ref struct BitReader
 
     public int ReadUBits(int count)
     {
-        if (count is <= 0 or > 8) throw new ArgumentOutOfRangeException(nameof(count));
+        if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
         if (_bitPosition == 0 && !_reader.TryRead(out _currentByte))
             throw new EndOfStreamException();
 
@@ -36,7 +36,7 @@ public ref struct BitReader
 
     public int ReadSBits(int count)
     {
-        if (count is <= 0 or > 8) throw new ArgumentOutOfRangeException(nameof(count));
+        if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
 
         int result = ReadUBits(count);
         int shift = 32 - count;

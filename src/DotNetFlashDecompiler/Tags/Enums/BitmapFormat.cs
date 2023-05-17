@@ -1,4 +1,4 @@
-﻿namespace DotNetFlashDecompiler;
+﻿namespace DotNetFlashDecompiler.Tags;
 
 /// <summary>
 /// Represents the possible bitmap data formats for <see cref="DefineBitsLosslessTag"/>

@@ -14,12 +14,12 @@ public sealed record ExportAssetsTag : TagItem, IBufferReadable<TagItem>
     {
         value = default;
 
-        if (!reader.TryReadBigEndian(out ushort assetsCount)) return false;
+        if (!reader.TryReadLittleEndian(out ushort assetsCount)) return false;
         
         var assets = new Dictionary<ushort, string>(assetsCount);
         for (int i = 0; i < assetsCount; i++)
         {
-            if (!reader.TryReadBigEndian(out ushort id)) return false;
+            if (!reader.TryReadLittleEndian(out ushort id)) return false;
             if (!reader.TryReadTo(out ReadOnlySequence<byte> nameSeq, 0)) return false;
 
             if (!assets.TryAdd(id, nameSeq.AsString())) return false;

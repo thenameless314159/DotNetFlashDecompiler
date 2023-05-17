@@ -1,4 +1,4 @@
-﻿namespace DotNetFlashDecompiler;
+﻿namespace DotNetFlashDecompiler.Tags;
 
 public enum ImageFormat : long
 {

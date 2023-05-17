@@ -11,8 +11,8 @@ public sealed record ScriptLimitsTag(ushort MaxRecursionDepth, ushort ScriptTime
     public new static bool TryRead(ref SequenceReader<byte> reader, [NotNullWhen(true)] out TagItem? value)
     {
         value = default;
-        if (!reader.TryReadBigEndian(out ushort maxRecursionDepth)) return false;
-        if (!reader.TryReadBigEndian(out ushort scriptTimeoutSeconds)) return false;
+        if (!reader.TryReadLittleEndian(out ushort maxRecursionDepth)) return false;
+        if (!reader.TryReadLittleEndian(out ushort scriptTimeoutSeconds)) return false;
         value = new ScriptLimitsTag(maxRecursionDepth, scriptTimeoutSeconds);
         return true;
     }

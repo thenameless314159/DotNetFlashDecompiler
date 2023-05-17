@@ -46,7 +46,7 @@ public sealed record ASConstantPool : AS3Item
         Doubles = new List<double>(length);
         for (int i = 0; i < length; i++)
         {
-            if (!reader.TryReadBigEndian(out double d)) 
+            if (!reader.TryReadLittleEndian(out double d)) 
                 return false;
 
             Doubles.Add(d);

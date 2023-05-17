@@ -11,11 +11,11 @@ public abstract record TagItem : ITagItem, IBufferReadable<TagItem>
     public static bool TryRead(ref SequenceReader<byte> reader, [NotNullWhen(true)] out TagItem? value)
     {
         value = default;
-        if (!reader.TryReadBigEndian(out ushort tagCode))
+        if (!reader.TryReadLittleEndian(out ushort tagCode))
             return false;
 
         var (tagKind, length) = ((TagKind)(tagCode >> 6), tagCode & 63);
-        if (length > 62 && !reader.TryReadBigEndian(out length))
+        if (length > 62 && !reader.TryReadLittleEndian(out length))
             return false;
 
         if (reader.TryReadExact(length, out var tagData))

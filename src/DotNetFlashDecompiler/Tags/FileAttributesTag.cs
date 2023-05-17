@@ -10,7 +10,7 @@ public sealed record FileAttributesTag(FileAttributes Attributes) : TagItem, IBu
 
     public new static bool TryRead(ref SequenceReader<byte> reader, [NotNullWhen(true)] out TagItem? value)
     {
-        if (reader.TryReadBigEndian(out int fileAttributes))
+        if (reader.TryReadLittleEndian(out int fileAttributes))
         {
             value = new FileAttributesTag((FileAttributes)fileAttributes);
             return true;
